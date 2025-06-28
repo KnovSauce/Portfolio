@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0a0a0a;
+      --text-color: #ffffff;
+      --section-bg: #111111;
+      --primary: #007bff;
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --gradient-warm: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    body.dark {
+      --bg-color: #0a0a0a;
+      --text-color: #ffffff;
+      --section-bg: #111111;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background-color: var(--section-bg);
+      padding: 1rem 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 999;
+      text-align: center;
+    }
+
+    nav ul {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      list-style: none;
+      flex-wrap: wrap;
+      padding-top: 0.5rem;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: bold;
+      position: relative;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: darkorange;
+    }
+
+    nav ul li a.active::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: var(--primary);
+      bottom: -4px;
+      left: 0;
+    }
+
+    .toggle-btn {
+      position: fixed;
+      right: 16px;
+      top: 16px;
+      z-index: 1000;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .toggle-btn:hover {
+      background: darkorange;
+      transform: scale(1.05);
+    }
+
+    section {
+      min-height: 100vh;
+      padding: 2.5rem 1rem;
+      max-width: 1000px;
+      margin: 1.5rem auto;
+      background-color: var(--section-bg);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(60px) scale(0.98);
+      opacity: 0;
+      transition: all 0.8s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    section::before {
+      content: attr(data-heading);
+      position: absolute;
+      top: 50%;
+      left: -100%;
+      transform: translateY(-50%);
+      font-size: clamp(4rem, 15vw, 12rem);
+      font-weight: bold;
+      color: var(--text-color);
+      opacity: 0.03;
+      white-space: nowrap;
+      z-index: 0;
+      transition: left 4s ease-out;
+      pointer-events: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    section.visible::before {
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    section h2 {
+      font-size: clamp(3rem, 12vw, 8rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: left;
+      width: 100%;
+      line-height: 0.9;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    #Introduction h2 {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #Academics h2 {
+      background: var(--gradient-secondary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #projects h2 {
+      background: var(--gradient-accent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #skills h2 {
+      background: var(--gradient-warm);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #fun h2 {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    #contact h2 {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    section * {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.6s ease-out;
+    }
+
+    section.visible * {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Project Cards */
+    #projects .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      padding-top: 1rem;
+    }
+
+    .project-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #ffffff;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .project-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(102, 126, 234, 0.4);
+    }
+
+    .project-card h3 {
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .project-card p {
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.5;
+    }
+
+    /* Academics */
+    #Academics .academics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      padding-top: 1rem;
+    }
+
+    .academic-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      text-align: left;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .academic-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(240, 147, 251, 0.4);
+    }
+
+    .academic-card h3 {
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .academic-card p {
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.5;
+    }
+
+    /* Skills */
+    #skills .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1rem;
+      padding-top: 1rem;
+    }
+
+    .skill-badge {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      padding: 12px;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .skill-badge:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px rgba(79, 172, 254, 0.4);
+    }
+
+    /* Fun Section */
+    #fun .fun-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .fun-card {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      padding: 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      text-align: left;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #2c3e50;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .fun-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(168, 237, 234, 0.4);
+    }
+
+    .fun-card h3 {
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .fun-card p {
+      color: #34495e;
+      line-height: 1.5;
+    }
+
+    /* Introduction Section */
+    .intro-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .intro-main {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 2.5rem 2rem;
+      border-radius: 20px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .intro-highlight {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .intro-cta {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .intro-icon, .highlight-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .intro-main h3, .intro-highlight h4 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    /* Enhanced Academic Cards */
+    .academic-card {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      padding: 2rem 1.5rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .academic-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(240, 147, 251, 0.4);
+    }
+
+    .academic-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .grade-display {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 15px;
+      display: inline-block;
+    }
+
+    .achievement-badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .academic-cta {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      margin-top: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .academic-cta h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Enhanced Project Cards */
+    .project-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 2rem 1.5rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      color: #ffffff;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+    }
+
+    .project-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .tech-stack {
+      margin: 1rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .tech-tag {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .project-status {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .projects-cta {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      margin-top: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .projects-cta h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Enhanced Skills */
+    .skill-badge {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      padding: 1.5rem 1rem;
+      border-radius: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-badge:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 15px 30px rgba(79, 172, 254, 0.4);
+    }
+
+    .skill-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .skill-level {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.7rem;
+      margin-top: 0.5rem;
+      display: inline-block;
+    }
+
+    .skills-cta {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      margin-top: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .skills-cta h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Enhanced Fun Cards */
+    .fun-card {
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      padding: 2rem 1.5rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      color: #2c3e50;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fun-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(168, 237, 234, 0.4);
+    }
+
+    .fun-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .fun-badge {
+      background: rgba(44, 62, 80, 0.1);
+      color: #2c3e50;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .fun-cta {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      margin-top: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .fun-cta h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Contact Section */
+    #contact .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+      width: 100%;
+    }
+
+    .contact-card {
+      padding: 2rem 1.5rem;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      border: 2px solid transparent;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 20px;
+      padding: 2px;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .contact-card:hover::before {
+      opacity: 1;
+    }
+
+    .email-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .linkedin-card {
+      background: linear-gradient(135deg, #0077b5 0%, #0e76a8 100%);
+      color: white;
+    }
+
+    .instagram-card {
+      background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
+      color: white;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .contact-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .contact-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .contact-card p {
+      opacity: 0.9;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .contact-link {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      color: white !important;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+      color: white !important;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .contact-cta {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      padding: 2rem;
+      border-radius: 20px;
+      margin-top: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-cta h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .contact-cta p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    a {
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: darkorange;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: var(--section-bg);
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+ 
+  <header>
+    <h1>Portfolio</h1>
+    <p>Welcome to my portfolio!</p>
+    <nav>
+      <ul>
+        <li><a href="#Introduction">Introduction</a></li>
+        <li><a href="#Academics">Academics</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#fun">Fun About Me</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="Introduction" data-heading="Introduction">
+    <h2>Introduction</h2>
+    <div class="intro-content">
+      <div class="intro-main">
+        <div class="intro-icon">👋</div>
+        <h3>Hello there!</h3>
+        <p>I am a passionate Software Engineer based in India, currently pursuing a degree in Computer Science and Engineering. With a strong enthusiasm for technology and problem-solving, I constantly strive to learn and grow in the field of software development.</p>
+      </div>
+      
+      <div class="intro-highlight">
+        <div class="highlight-icon">🚀</div>
+        <h4>First HTML Project</h4>
+        <p>This marks my very first project using HTML, and I'm excited to showcase my journey as I continue building and exploring the world of web development!</p>
+      </div>
+      
+      <div class="intro-cta">
+        <h3>Welcome to my digital space!</h3>
+        <p>Here you'll discover my academic journey, exciting projects, technical skills, and the fun side of who I am. Let's explore together! 🌟</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="Academics" data-heading="Academics">
+    <h2>Academics</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 2.5rem; color: rgba(255, 255, 255, 0.8);">
+      Excellence through dedication and continuous learning 📚✨
+    </p>
+    <div class="academics-grid">
+      <div class="academic-card">
+        <div class="academic-icon">🏫</div>
+        <h3>Class 10</h3>
+        <div class="grade-display">90.60%</div>
+        <p>Central Academy, Gorakhpur</p>
+        <div class="achievement-badge">Excellent Performance</div>
+      </div>
+      <div class="academic-card">
+        <div class="academic-icon">🎓</div>
+        <h3>Class 12</h3>
+        <div class="grade-display">91.5%</div>
+        <p>Central Academy, Gorakhpur</p>
+        <div class="achievement-badge">Outstanding Results</div>
+      </div>
+      <div class="academic-card">
+        <div class="academic-icon">🏛️</div>
+        <h3>B.Tech CSE</h3>
+        <div class="grade-display">7.59 SGPA</div>
+        <p>BIET Jhansi</p>
+        <div class="achievement-badge">Current Journey</div>
+      </div>
+    </div>
+    
+    <div class="academic-cta">
+      <h3>Academic Philosophy</h3>
+      <p>My academic journey has been marked by consistent performance and a passion for learning. From excelling in my school years to pursuing my engineering degree, I've maintained strong academic standards while developing a deep understanding of computer science fundamentals.</p>
+    </div>
+  </section>
+
+  <section id="projects" data-heading="Projects">
+    <h2>Projects</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 2.5rem; color: rgba(255, 255, 255, 0.8);">
+      Building solutions, one line of code at a time 💻⚡
+    </p>
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="project-icon">🌐</div>
+        <h3>Portfolio Website</h3>
+        <p>Built using HTML and CSS. A personal site to showcase skills and projects with modern design and smooth animations.</p>
+        <div class="tech-stack">
+          <span class="tech-tag">HTML5</span>
+          <span class="tech-tag">CSS3</span>
+          <span class="tech-tag">JavaScript</span>
+        </div>
+        <div class="project-status">✨ Live Project</div>
+      </div>
+      <div class="project-card">
+        <div class="project-icon">🧩</div>
+        <h3>Sudoku Solver</h3>
+        <p>Developed in C to auto-solve Sudoku puzzles using backtracking algorithm. An efficient solution for puzzle enthusiasts.</p>
+        <div class="tech-stack">
+          <span class="tech-tag">C</span>
+          <span class="tech-tag">Algorithms</span>
+          <span class="tech-tag">Backtracking</span>
+        </div>
+        <div class="project-status">🚀 Completed</div>
+      </div>
+    </div>
+    
+    <div class="projects-cta">
+      <h3>More Projects Coming Soon!</h3>
+      <p>I'm constantly working on new and exciting projects. From web applications to algorithmic challenges, my journey in software development continues to evolve. Stay tuned for more innovative solutions!</p>
+    </div>
+  </section>
+
+  <section id="skills" data-heading="Skills">
+    <h2>Skills</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 2.5rem; color: rgba(255, 255, 255, 0.8);">
+      Tools and technologies that power my creativity 🛠️💡
+    </p>
+    <div class="skills-grid">
+      <div class="skill-badge">
+        <div class="skill-icon">🌐</div>
+        <span>HTML5</span>
+        <div class="skill-level">Advanced</div>
+      </div>
+      <div class="skill-badge">
+        <div class="skill-icon">🎨</div>
+        <span>CSS3</span>
+        <div class="skill-level">Advanced</div>
+      </div>
+      <div class="skill-badge">
+        <div class="skill-icon">⚡</div>
+        <span>JavaScript</span>
+        <div class="skill-level">Intermediate</div>
+      </div>
+      <div class="skill-badge">
+        <div class="skill-icon">⚙️</div>
+        <span>C/C++</span>
+        <div class="skill-level">Advanced</div>
+      </div>
+      <div class="skill-badge">
+        <div class="skill-icon">🧠</div>
+        <span>Problem Solving</span>
+        <div class="skill-level">Expert</div>
+      </div>
+      <div class="skill-badge">
+        <div class="skill-icon">💬</div>
+        <span>Communication</span>
+        <div class="skill-level">Advanced</div>
+      </div>
+    </div>
+    
+    <div class="skills-cta">
+      <h3>Always Learning, Always Growing</h3>
+      <p>Technology evolves rapidly, and so do I! I'm constantly expanding my skill set, exploring new frameworks, and diving deep into emerging technologies. The journey of learning never ends! 🚀</p>
+    </div>
+  </section>
+
+  <section id="fun" data-heading="Fun About Me">
+    <h2>About Me</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 2.5rem; color: rgba(255, 255, 255, 0.8);">
+      Beyond the code - discovering the human behind the programmer 🌈✨
+    </p>
+    <div class="fun-grid">
+      <div class="fun-card">
+        <div class="fun-icon">📚</div>
+        <h3>Bookworm Mode</h3>
+        <p>I love reading thought-provoking works by Franz Kafka, Albert Camus, Fyodor Dostoevsky, and many more. Existentialism and absurdism truly fascinate me.</p>
+        <div class="fun-badge">Literature Enthusiast</div>
+      </div>
+      <div class="fun-card">
+        <div class="fun-icon">🗺️</div>
+        <h3>Map Geek</h3>
+        <p>One of my favorite hobbies is studying world maps. Geography is my go-to escape when I'm not in tech mode.</p>
+        <div class="fun-badge">Geography Explorer</div>
+      </div>
+      <div class="fun-card">
+        <div class="fun-icon">✍️</div>
+        <h3>The Creator Within</h3>
+        <p>I often find myself writing poems, journals, and random rants. It helps me process, reflect, and express my inner world.</p>
+        <div class="fun-badge">Creative Writer</div>
+      </div>
+      <div class="fun-card">
+        <div class="fun-icon">🎨</div>
+        <h3>Drawing Therapy</h3>
+        <p>Sketching and drawing are not just hobbies — they're part of how I reconnect with calm and creativity.</p>
+        <div class="fun-badge">Visual Artist</div>
+      </div>
+      <div class="fun-card">
+        <div class="fun-icon">🌍</div>
+        <h3>Life Philosophy</h3>
+        <p>My mantra is simple: live life to its fullest. I want to explore every domain of life, learn from it, and evolve.</p>
+        <div class="fun-badge">Life Explorer</div>
+      </div>
+    </div>
+    
+    <div class="fun-cta">
+      <h3>Life is a Beautiful Adventure</h3>
+      <p>I believe in living authentically and embracing all aspects of existence. Whether it's diving deep into philosophical texts, exploring new places through maps, or expressing creativity through art and writing - every experience shapes who I am as both a person and a developer! 🌟</p>
+    </div>
+  </section>
+
+  <section id="contact" data-heading="Contact">
+    <h2>Contact</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 2.5rem; color: rgba(255, 255, 255, 0.8);">
+      Let's connect and build something amazing together! 🚀
+    </p>
+    
+    <div class="contact-grid">
+      <div class="contact-card email-card">
+        <div class="contact-icon">📧</div>
+        <h3>Email Me</h3>
+        <p>Drop me a line anytime</p>
+        <a href="mailto:unworthy.aditya@gmail.com" class="contact-link">unworthy.aditya@gmail.com</a>
+      </div>
+      
+      <div class="contact-card linkedin-card">
+        <div class="contact-icon">💼</div>
+        <h3>LinkedIn</h3>
+        <p>Let's connect professionally</p>
+        <a href="https://www.linkedin.com/in/aditya-ojha-bb9733331" target="_blank" class="contact-link">Connect with me</a>
+      </div>
+      
+      <div class="contact-card instagram-card">
+        <div class="contact-icon">📸</div>
+        <h3>Instagram</h3>
+        <p>Follow my creative journey</p>
+        <a href="https://www.instagram.com/jeengertea/" target="_blank" class="contact-link">@jeengertea</a>
+      </div>
+    </div>
+    
+    <div class="contact-cta">
+      <h3>Ready to collaborate?</h3>
+      <p>I'm always excited to work on new projects and meet like-minded people. Whether it's a coding challenge, creative project, or just a chat about technology and life - I'm all ears!</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Adyeetya Ojha. All rights reserved.</p>
+  </footer>
+
+  <script>
+    
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const sections = document.querySelectorAll("section");
+      
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          } else {
+            entry.target.classList.remove("visible");
+          }
+        });
+      }, { threshold: 0.2 });
+
+      sections.forEach(section => observer.observe(section));
+
+      // Load saved theme
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+        document.querySelector(".toggle-btn").textContent = "Light Mode";
+      }
+    });
+  </script>
+</body>
+</html>
